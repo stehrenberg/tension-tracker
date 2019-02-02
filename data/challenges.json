@@ -1,0 +1,31 @@
+{
+  "challenges" : [
+    {
+      "id": 0,
+      "shortTitle": "smile",
+      "title": "Bitte lächeln!",
+      "level": 1,
+      "text": "Nimm Blickkontakt zu einer unbekannten Person auf und lächle ihr zu.",
+      "hint": "Auf der Straße, im Büro, in der Bahn - wo auch immer dir danach ist!",
+      "easier": "Mach die Übung zunächst ohne Blickkontakt: nimm eine Person, die gerade telefoniert - oder die dir den Rücken zugedreht hat.",
+      "isActive": true,
+      "isCompleted": false,
+      "rainchecks": 0,
+      "couragePoints": 2,
+      "activated": "2019-01-15 10:14:23"
+    },
+    {
+      "id": 1,
+      "shortTitle": "say-hi",
+      "title": "Sag hallo!",
+      "level": 3,
+      "text": "Das nächste Mal, wenn du deinen Nachbarn im Flur (oder auf der Straße) begegnest: sag im Vorbeigehen \"Hallo\".",
+      "easier": "Du kannst zu Beginn auch nur flüstern oder gar stumm die Lippen bewegen, bis du dich sicher genug fühlst, es laut auszusprechen.",
+      "isActive": false,
+      "isCompleted": false,
+      "rainchecks": 0,
+      "couragePoints": 3,
+      "activated": ""
+    }
+  ]
+}
