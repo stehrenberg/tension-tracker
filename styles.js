@@ -27,6 +27,14 @@ const styles = {
             padding: 20,
             width: '100%',
         },
+        panHandlerView: {
+            flex:1,
+            backgroundColor: '#fff',
+            width: "100%",
+            height: "100%",
+            opacity: 100,
+        }
+
     }),
     /*container: View.propTypes.style,
     //contentViewContainer: View.propTypes.style,
