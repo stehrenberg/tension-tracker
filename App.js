@@ -34,14 +34,14 @@ const app = class App extends React.Component {
         const { height } = Dimensions.get('window');
 
         const changeBrightness = () => {
-             console.log('ping');
             const brightnessDelta = 255 * dy / ( height << 1 );
             const newRgbValues = rgbValues.map(value => Math.max(Math.min(value - brightnessDelta, 255), 0));
             [red, green, blue] = [...newRgbValues];
+
             return { red, green, blue };
         };
-        const changeHue = () => {
 
+        const changeHue = () => {
             const maxDistance = this.calcLengthOf(this.calcVectorBetween(this.initialPinchCoords));
             const touchCoordinates = event.nativeEvent.changedTouches.map((touch) => ( {
                 x: touch.pageX,
@@ -54,31 +54,19 @@ const app = class App extends React.Component {
             const newRedCrunched = Math.min(newRed, 255);
             const newGreen = newRed >= 255 ? green + (newRed - 255) : green;
             const newGreenCrunched = Math.min(newGreen, 255);
-            const newBlue = newGreen >= 255 ? blue + (newGreen -255) : blue;
-            const newBlueCrunched = Math.min(newBlue, 255);
-            const finalRed = newBlue > 0? Math.max(newRedCrunched - newBlueCrunched, 0) : newRedCrunched;
+            //const newBlue = newGreen >= 255 ? blue + (newGreen -255) : blue;
+            //const newBlueCrunched = Math.min(newBlue, 255);
+            const finalRed = newGreen >= 255? Math.max( newRedCrunched - newGreen + 255, 0) : newRedCrunched;
 
-
-            console.log(newRed, newGreen, newBlue);
-            return { red: finalRed, green: newGreenCrunched, blue: newBlueCrunched };
+            return { red: finalRed, green: newGreenCrunched, blue };
         };
 
         const backgroundColor = numberActiveTouches === 1 ? changeBrightness() : changeHue();
+        console.log(backgroundColor);
 
         this.currentRGBValues = { ...backgroundColor };
         this.colorChangeView && this.colorChangeView.setNativeProps({ backgroundColor: this.generateRGBColorString(red, green, blue) });
     };
-
-
-    calcVectorBetween = (vectorPair) => vectorPair.reduce(
-        (prev = { x: 0, y: 0 }, current) => (
-            {
-                dx: current.x - prev.x,
-                dy: current.y - prev.y
-            } )
-    );
-
-    calcLengthOf = ({dx, dy}) => Math.sqrt(Math.abs( dx * dx + dy * dy ));
 
     handlePanEnd = (event, gestureState) => {
         this.setState({ ...this.currentRGBValues });
@@ -105,6 +93,15 @@ const app = class App extends React.Component {
         return `rgba(${ red }, ${ green }, ${ blue }, 1)`;
     };
 
+    calcVectorBetween = (vectorPair) => vectorPair.reduce(
+        (prev = { x: 0, y: 0 }, current) => (
+            {
+                dx: current.x - prev.x,
+                dy: current.y - prev.y
+            } )
+    );
+
+    calcLengthOf = ({dx, dy}) => Math.sqrt(Math.abs( dx * dx + dy * dy ));
 
     createPanResponderHandlers = () => {
         const itsTrue = (event, gestureState) => true;
