@@ -51,7 +51,7 @@ const app = class App extends React.Component {
             const colorDelta = 255 * ((maxDistance - deltaDistance) / maxDistance || 0);
 
             const newRed = red + colorDelta;
-            const newRedCrunched = Math.min(newRed, 255);
+            const newRedCrunched = Math.max(Math.min(newRed, 255), 0);
             const newGreen = newRed >= 255 ? green + (newRed - 255) : green;
             const newGreenCrunched = Math.min(newGreen, 255);
             //const newBlue = newGreen >= 255 ? blue + (newGreen -255) : blue;

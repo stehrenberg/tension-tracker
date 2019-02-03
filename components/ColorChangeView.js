@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, ScrollView, PanResponder, Dimensions } from 'react-native';
+import { Text, View, PanResponder, Dimensions } from 'react-native';
 
 const colorChangeView = class ColorChangeView extends React.Component {
 
@@ -8,8 +8,8 @@ const colorChangeView = class ColorChangeView extends React.Component {
     render() {
         const { style } = this.props;
 
-        return <ScrollView ref={ view => this.view = view }
-                           style={{contentContainer: style }}
+        return <View ref={ view => this.view = view }
+                           style={ {...style} }
         />;
     }
 
