@@ -4,6 +4,16 @@ import { Text, View, PanResponder, Dimensions } from 'react-native';
 import ColorChangeView from './components/ColorChangeView';
 import styles from './styles';
 
+
+const STATES = [
+    increaseR,
+    decreaseB,
+    increaseG,
+    decreaseR,
+    increaseB,
+    decreaseG,
+];
+
 const app = class App extends React.Component {
 
     constructor(props) {
@@ -12,7 +22,9 @@ const app = class App extends React.Component {
         this.state = {
             red: 127,
             green: 0,
-            blue: 0
+            blue: 0,
+            increase: red,
+            decrease: null,
         };
         this.colorChangeView = null;
         this.panResponderHandlers = this.createPanResponderHandlers();

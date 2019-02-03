@@ -3,6 +3,11 @@ import { Text, View, PanResponder, Dimensions } from 'react-native';
 
 const colorChangeView = class ColorChangeView extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
+
     view = null;
 
     render() {
