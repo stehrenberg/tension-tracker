@@ -5,15 +5,6 @@ import ColorChangeView from './components/ColorChangeView';
 import styles from './styles';
 
 
-const STATES = [
-    increaseR,
-    decreaseB,
-    increaseG,
-    decreaseR,
-    increaseB,
-    decreaseG,
-];
-
 const app = class App extends React.Component {
 
     constructor(props) {
@@ -23,8 +14,6 @@ const app = class App extends React.Component {
             red: 127,
             green: 0,
             blue: 0,
-            increase: red,
-            decrease: null,
         };
         this.colorChangeView = null;
         this.panResponderHandlers = this.createPanResponderHandlers();
@@ -34,7 +23,6 @@ const app = class App extends React.Component {
 
     handlePanGrant = (event, gestureState) => {
         this.initialPinchCoords = event.nativeEvent.changedTouches.map(touch => ( { x: touch.pageX, y: touch.pageY } ));
-        console.log(this.initialPinchCoords);
     };
 
     handlePanMove = (event, gestureState) => {
@@ -60,17 +48,21 @@ const app = class App extends React.Component {
                 y: touch.pageY
             } ));
             const deltaDistance = this.calcLengthOf(this.calcVectorBetween(touchCoordinates)) || 0;
-            const colorDelta = 255 * ((maxDistance - deltaDistance) / maxDistance || 0);
+            const relativeColorDelta = ((maxDistance - deltaDistance) / maxDistance || 0);
+            const colorDelta = 255 * relativeColorDelta;
 
-            const newRed = red + colorDelta;
+            const newRed = green >= 255? Math.max(red - colorDelta, 0) : red + colorDelta;
             const newRedCrunched = Math.max(Math.min(newRed, 255), 0);
-            const newGreen = newRed >= 255 ? green + (newRed - 255) : green;
+            const newGreen = newRed >= 255 ? green + (newRed - 255) : newRed <= 0 && green >= 255? green + colorDelta :green;
             const newGreenCrunched = Math.min(newGreen, 255);
-            //const newBlue = newGreen >= 255 ? blue + (newGreen -255) : blue;
-            //const newBlueCrunched = Math.min(newBlue, 255);
+            const newBlue = newGreen >= 255 && newRed < 1 ? blue + (newGreen -255) : blue;
+            const newBlueCrunched = Math.min(newBlue, 255);
             const finalRed = newGreen >= 255? Math.max( newRedCrunched - newGreen + 255, 0) : newRedCrunched;
+            const finalGreen = blue >= 255? Math.max(newGreenCrunched - colorDelta, 0) : newGreenCrunched;
 
-            return { red: finalRed, green: newGreenCrunched, blue };
+
+            console.log(newGreen, newBlue);
+            return { red: finalRed, green: finalGreen, blue: newBlueCrunched };
         };
 
         const backgroundColor = numberActiveTouches === 1 ? changeBrightness() : changeHue();
