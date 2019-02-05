@@ -33,8 +33,7 @@ const styles = {
             width: "100%",
             height: "100%",
             opacity: 100,
-        }
-
+        },
     }),
     /*container: View.propTypes.style,
     //contentViewContainer: View.propTypes.style,
@@ -72,6 +71,13 @@ const styles = {
             borderRadius: 5,
             shadowColor: '#f0f',
         }
+    }),
+    views: StyleSheet.create({
+        snapButtonView: {
+            flex: 0.18,
+            backgroundColor: '#595959',
+            opacity: 10,
+        },
     }),
 };
 

@@ -1,8 +1,10 @@
 import React from 'react';
 import { Text, View, PanResponder, Dimensions } from 'react-native';
+import { Avatar } from 'react-native-material-ui';
 
 import ColorChangeView from './components/ColorChangeView';
 import styles from './styles';
+import ActionButton from "react-native-material-ui/src/ActionButton";
 
 
 const app = class App extends React.Component {
@@ -48,21 +50,23 @@ const app = class App extends React.Component {
                 y: touch.pageY
             } ));
             const deltaDistance = this.calcLengthOf(this.calcVectorBetween(touchCoordinates)) || 0;
-            const relativeColorDelta = ((maxDistance - deltaDistance) / maxDistance || 0);
+            const relativeColorDelta = ( ( maxDistance - deltaDistance ) / maxDistance || 0 );
             const colorDelta = 255 * relativeColorDelta;
 
-            const newRed = green >= 255? Math.max(red - colorDelta, 0) : red + colorDelta;
+            const newRed = green >= 255 ? Math.max(red - colorDelta, 0) : red + colorDelta;
             const newRedCrunched = Math.max(Math.min(newRed, 255), 0);
-            const newGreen = newRed >= 255 ? green + (newRed - 255) : newRed <= 0 && green >= 255? green + colorDelta :green;
+            const newGreen = newRed >= 255 && blue <= 0 ? green + ( newRed - 255 ) : newRed <= 0 && green >= 255 ? green + colorDelta : green;
             const newGreenCrunched = Math.min(newGreen, 255);
-            const newBlue = newGreen >= 255 && newRed < 1 ? blue + (newGreen -255) : blue;
+            const newBlue = newGreen >= 255 && newRed < 1 ? blue + ( newGreen - 255 ) : blue;
             const newBlueCrunched = Math.min(newBlue, 255);
-            const finalRed = newGreen >= 255? Math.max( newRedCrunched - newGreen + 255, 0) : newRedCrunched;
-            const finalGreen = blue >= 255? Math.max(newGreenCrunched - colorDelta, 0) : newGreenCrunched;
+            const temporaryRed = newGreen >= 255 ? Math.max(newRedCrunched - newGreen + 255, 0) : newRedCrunched;
+            const finalGreen = blue >= 255 ? Math.max(newGreenCrunched - colorDelta, 0) : newGreenCrunched;
+            const finalRed = blue >= 255 && green > 0 ? 0 : temporaryRed;
+            const finalBlue = green <= 0 && finalRed >= 255? Math.max(newBlueCrunched - colorDelta, 0) : newBlueCrunched;
 
 
             console.log(newGreen, newBlue);
-            return { red: finalRed, green: finalGreen, blue: newBlueCrunched };
+            return { red: finalRed, green: finalGreen, blue: finalBlue };
         };
 
         const backgroundColor = numberActiveTouches === 1 ? changeBrightness() : changeHue();
@@ -84,10 +88,28 @@ const app = class App extends React.Component {
                         this.colorChangeView = colorChangeView;
                     } }
                     style={ { ...styles.general.view, backgroundColor: this.generateRGBColorString() } }/>
-                <Text style={ { fontSize: 36, alignSelf: 'center', position: 'absolute', bottom: 50 } }>Hi!</Text>
+                <View style={ styles.views.snapButtonView }>
+                    <ActionButton
+                        size={ 100 }
+                        icon="camera"
+                        style={ {
+                            icon: { fontSize: 60 },
+                            container: {
+                                backgroundColor: '#55cccc',
+                                position: 'absolute',
+                                right: Dimensions.get('window').width * 0.5 - 80,
+                                bottom: 5,
+                            }
+                        } }
+                        onPress={
+                            (event) => console.log(event)
+                        }
+                    />
+                </View>
             </View>
+
         );
-    };
+    }
 
     generateRGBColorString = (
         red = this.state.red,
@@ -105,7 +127,7 @@ const app = class App extends React.Component {
             } )
     );
 
-    calcLengthOf = ({dx, dy}) => Math.sqrt(Math.abs( dx * dx + dy * dy ));
+    calcLengthOf = ({ dx, dy }) => Math.sqrt(Math.abs(dx * dx + dy * dy));
 
     createPanResponderHandlers = () => {
         const itsTrue = (event, gestureState) => true;
