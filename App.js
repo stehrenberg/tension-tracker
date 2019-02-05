@@ -13,7 +13,7 @@ const app = class App extends React.Component {
         super(props);
 
         this.state = {
-            red: 0,
+            red: 200,
             green: 0,
             blue: 0,
         };
@@ -21,16 +21,22 @@ const app = class App extends React.Component {
         this.panResponderHandlers = this.createPanResponderHandlers();
         this.currentRGBValues = { ...this.state };
         this.initialPinchCoords = [];
+        this.colorSaveTimeout = null;
     }
 
     handlePanGrant = (event, gestureState) => {
-        this.initialPinchCoords = event.nativeEvent.changedTouches.map(touch => ( { x: touch.pageX, y: touch.pageY } ));
+        const {touches} = { ...event.nativeEvent };
+        const useTouches = event.nativeEvent.changedTouches.length > 2
+            ? event.nativeEvent.changedTouches
+            : touches;
+        this.initialPinchCoords = useTouches.map(touch => ( { x: touch.pageX, y: touch.pageY } ));
     };
 
     handlePanMove = (event, gestureState) => {
 
-        const { numberActiveTouches, touches } = gestureState;
         let { red, green, blue } = this.state;
+        const { numberActiveTouches } = gestureState;
+        const { touches } = { ...event.nativeEvent };
         const rgbValues = [red, green, blue];
         const { dx, dy } = gestureState;
         const { height } = Dimensions.get('window');
@@ -45,7 +51,10 @@ const app = class App extends React.Component {
 
         const changeHue = () => {
             const maxDistance = this.calcLengthOf(this.calcVectorBetween(this.initialPinchCoords));
-            const touchCoordinates = event.nativeEvent.changedTouches.map((touch) => ( {
+            const useTouches = event.nativeEvent.changedTouches.length > 2
+                ? event.nativeEvent.changedTouches
+                : touches;
+            const touchCoordinates = useTouches.map((touch) => ( {
                 x: touch.pageX,
                 y: touch.pageY
             } ));
@@ -62,22 +71,22 @@ const app = class App extends React.Component {
             const temporaryRed = newGreen >= 255 ? Math.max(newRedCrunched - newGreen + 255, 0) : newRedCrunched;
             const finalGreen = blue >= 255 ? Math.max(newGreenCrunched - colorDelta, 0) : newGreenCrunched;
             const finalRed = blue >= 255 && green > 0 ? 0 : temporaryRed;
-            const finalBlue = green <= 0 && finalRed >= 255? Math.max(newBlueCrunched - colorDelta, 0) : newBlueCrunched;
+            const finalBlue = green <= 0 && finalRed >= 255 ? Math.max(newBlueCrunched - colorDelta, 0) : newBlueCrunched;
 
-
-            console.log(newGreen, newBlue);
             return { red: finalRed, green: finalGreen, blue: finalBlue };
         };
 
         const backgroundColor = numberActiveTouches === 1 ? changeBrightness() : changeHue();
-        console.log(backgroundColor);
+        //console.log(backgroundColor);
 
         this.currentRGBValues = { ...backgroundColor };
         this.colorChangeView && this.colorChangeView.setNativeProps({ backgroundColor: this.generateRGBColorString(red, green, blue) });
     };
 
     handlePanEnd = (event, gestureState) => {
+        //this.colorSaveTimeout = setTimeout(this.saveColor(), 1000);
         this.setState({ ...this.currentRGBValues });
+
     };
 
     render() {
