@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 const styles = {
     general: StyleSheet.create({
@@ -11,7 +11,12 @@ const styles = {
         title: {
             color: '#e44681',
             fontSize: 36,
-            fontWeight: "bold",
+            fontWeight: 'bold',
+        },
+        calendarTitle: {
+            color: '#e44681',
+            fontSize: 20,
+            fontWeight: 'bold',
         },
         text: {
             color: '#595959',
@@ -78,6 +83,11 @@ const styles = {
             backgroundColor: '#595959',
             opacity: 10,
         },
+        calendarView: {
+            backgroundColor: "#ffe",
+            padding: 20,
+            height: Dimensions.get('window').height,
+        }
     }),
 };
 

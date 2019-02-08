@@ -1,11 +1,12 @@
 import React from 'react';
-import { Text, View, PanResponder, Dimensions } from 'react-native';
-import { Avatar } from 'react-native-material-ui';
+import { Platform, Text, View, PanResponder, Dimensions, ViewPagerAndroid } from 'react-native';
 
 import ColorChangeView from './components/ColorChangeView';
+import PagerView from './components/PagerView';
+import Calendar from './components/Calendar';
 import styles from './styles';
-import ActionButton from "react-native-material-ui/src/ActionButton";
 
+const { OS } = Platform.OS;
 
 const app = class App extends React.Component {
 
@@ -91,31 +92,20 @@ const app = class App extends React.Component {
 
     render() {
         return (
-            <View style={ styles.general.panHandlerView } { ...this.panResponderHandlers }>
+            <PagerView initialPage={ 1 }
+                              style={ styles.general.panHandlerView }
+                              { ...this.panResponderHandlers }>
+                <View key="1" style={ styles.general.view }>
                 <ColorChangeView
                     ref={ colorChangeView => {
                         this.colorChangeView = colorChangeView;
                     } }
                     style={ { ...styles.general.view, backgroundColor: this.generateRGBColorString() } }/>
-                <View style={ styles.views.snapButtonView }>
-                    <ActionButton
-                        size={ 100 }
-                        icon="camera"
-                        style={ {
-                            icon: { fontSize: 60 },
-                            container: {
-                                backgroundColor: '#55cccc',
-                                position: 'absolute',
-                                right: Dimensions.get('window').width * 0.5 - 80,
-                                bottom: 5,
-                            }
-                        } }
-                        onPress={
-                            (event) => console.log(event)
-                        }
-                    />
                 </View>
-            </View>
+                <View key="2" style={ styles.views.calendarView }>
+                    <Calendar>bla</Calendar>
+                </View>
+            </PagerView>
 
         );
     }
