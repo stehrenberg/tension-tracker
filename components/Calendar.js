@@ -15,7 +15,7 @@ const calendar = class Calendar extends React.Component {
                 <View style={ {
                     textContainer:
                         {
-                            flex:1,
+                            flex: 1,
                             display: 'flex',
                             flexDirection: 'column',
                             ...styles.general.textContainer
@@ -29,10 +29,10 @@ const calendar = class Calendar extends React.Component {
                         }
                     } }>
                         <Text style={ styles.general.calendarTitle }>This Week</Text>
-                        <View style={{ textContainer: {flex: 1, flexDirection: 'row', alignItems: 'stretched'} }}>
-                        {
-                            WEEKDAYS.map(day => <Text>{ `${ day }` }</Text>)
-                        }
+                        <View style={ { textContainer: { flex: 1, flexDirection: 'row', alignItems: 'stretched' } } }>
+                            {
+                                WEEKDAYS.map(day => <Text key={ day }>{ `${ day }` }</Text>)
+                            }
                         </View>
                     </View>
                     <View style={ {
@@ -44,13 +44,14 @@ const calendar = class Calendar extends React.Component {
                     } }>
                         {
                             [0, 1, 2, 3, 4].map((number) => (
-                                <View style={ {
+                                <View key={ number } style={ {
                                     textContainer: {
                                         flex: 1,
                                         flexDirection: 'row',
                                         alignItems: 'stretched',
                                     }
                                 } }>
+                                    <Text>bla</Text>
                                     {
                                         //WEEKDAYS.map((day, i) => ( <Text>{ `${ number * 7 + ++i }` }</Text> ))
                                     }

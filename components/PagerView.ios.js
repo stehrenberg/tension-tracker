@@ -6,7 +6,11 @@ export default class PagerView extends React.Component {
     render() {
         console.log("ios:", this.props);
         return (
-            <ScrollView style={ { backgroundColor: "#0ff" } } pagingEnabled={ true }>
+            <ScrollView
+                pagingEnabled={ true }
+                showsHorizontalScrollIndicator={ true }
+                horizontal={ true }
+                {...this.props}>
                 { this.props.children }
             </ScrollView>
         );

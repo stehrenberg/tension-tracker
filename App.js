@@ -26,7 +26,7 @@ const app = class App extends React.Component {
     }
 
     handlePanGrant = (event, gestureState) => {
-        const {touches} = { ...event.nativeEvent };
+        const { touches } = { ...event.nativeEvent };
         const useTouches = event.nativeEvent.changedTouches.length > 2
             ? event.nativeEvent.changedTouches
             : touches;
@@ -92,17 +92,15 @@ const app = class App extends React.Component {
 
     render() {
         return (
-            <PagerView initialPage={ 1 }
-                              style={ styles.general.panHandlerView }
-                              { ...this.panResponderHandlers }>
-                <View key="1" style={ styles.general.view }>
-                <ColorChangeView
-                    ref={ colorChangeView => {
-                        this.colorChangeView = colorChangeView;
-                    } }
-                    style={ { ...styles.general.view, backgroundColor: this.generateRGBColorString() } }/>
+            <PagerView style={ styles.general.panHandlerView } { ...this.panResponderHandlers }>
+                <View key="1" style={ {...styles.general.view }}>
+                    <ColorChangeView
+                        ref={ colorChangeView => {
+                            this.colorChangeView = colorChangeView;
+                        } }
+                        style={ { ...styles.general.view, backgroundColor: this.generateRGBColorString() } }/>
                 </View>
-                <View key="2" style={ styles.views.calendarView }>
+                <View key="2" style={ {...styles.views.calendarView }}>
                     <Calendar>bla</Calendar>
                 </View>
             </PagerView>

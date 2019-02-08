@@ -7,6 +7,7 @@ const styles = {
             backgroundColor: '#26cbb5',
             alignItems: 'stretch',
             justifyContent: 'center',
+            width: Dimensions.get('window').width,
         },
         title: {
             color: '#e44681',
@@ -87,6 +88,7 @@ const styles = {
             backgroundColor: "#ffe",
             padding: 20,
             height: Dimensions.get('window').height,
+            width: Dimensions.get('window').width,
         }
     }),
 };
