@@ -1,10 +1,13 @@
 import React from 'react';
 import { Platform, Text, View, PanResponder, Dimensions, ViewPagerAndroid } from 'react-native';
+import { Font, LinearGradient } from 'expo';
+import Moment from 'moment';
 
 import ColorChangeView from './components/ColorChangeView';
 import PagerView from './components/PagerView';
 import Calendar from './components/Calendar';
 import styles from './styles';
+import { data } from './data/entries';
 
 const { OS } = Platform.OS;
 
@@ -17,12 +20,23 @@ const app = class App extends React.Component {
             red: 200,
             green: 0,
             blue: 0,
+            loaded: false,
         };
         this.colorChangeView = null;
         this.panResponderHandlers = this.createPanResponderHandlers();
         this.currentRGBValues = { ...this.state };
         this.initialPinchCoords = [];
         this.colorSaveTimeout = null;
+    }
+
+    async componentDidMount() {
+        await Font.loadAsync({
+            'chalkduster': require('./assets/fonts/chalkduster.ttf'),
+            'pea-walker': require('./assets/fonts/pea-walker.ttf'),
+            'glotona-white': require('./assets/fonts/glotona-white.ttf'),
+        });
+
+        this.setState({ loaded: true });
     }
 
     handlePanGrant = (event, gestureState) => {
@@ -91,20 +105,33 @@ const app = class App extends React.Component {
     };
 
     render() {
-        return (
+        return this.state.loaded && (
             <PagerView style={ styles.general.panHandlerView } { ...this.panResponderHandlers }>
-                <View key="1" style={ {...styles.general.view }}>
+                <View key="1" style={ { ...styles.general.view } }>
                     <ColorChangeView
                         ref={ colorChangeView => {
                             this.colorChangeView = colorChangeView;
                         } }
                         style={ { ...styles.general.view, backgroundColor: this.generateRGBColorString() } }/>
                 </View>
-                <View key="2" style={ {...styles.views.calendarView }}>
-                    <Calendar>bla</Calendar>
+                <View key="2" style={ { ...styles.views.calendarView } }>
+                    <Calendar/>
+                </View>
+                <View key="3" style={ styles.general.view }>
+                    <LinearGradient colors={ [
+                        ...data.filter(entry => Moment(entry.date).format('DD') == "06")
+                            .map(entry => `rgba(${ entry.color.join(',') })`),
+                        'rgba(0,0,0,1)',
+                        'rgba(1,1,0,0.8)'
+                    ] } style={ {
+                        position: 'absolute',
+                        height: '100%',
+                        width: '100%',
+                    } }>
+                        <Text style={{color: '#fff'}}>bla</Text>
+                    </LinearGradient>
                 </View>
             </PagerView>
-
         );
     }
 

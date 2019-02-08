@@ -4,7 +4,6 @@ import { View, ScrollView, ViewPagerAndroid } from 'react-native';
 export default class PagerView extends React.Component {
 
     render() {
-        console.log("ios:", this.props);
         return (
             <ScrollView
                 pagingEnabled={ true }
@@ -14,6 +13,5 @@ export default class PagerView extends React.Component {
                 { this.props.children }
             </ScrollView>
         );
-
     }
 }

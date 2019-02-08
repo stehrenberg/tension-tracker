@@ -1,17 +1,23 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { Card } from 'react-native-material-ui';
+import { LinearGradient } from 'expo';
+import Moment from 'moment';
 
 import styles from '../styles';
+import { data } from '../data/entries';
 
 
 const calendar = class Calendar extends React.Component {
 
     render() {
+
         const WEEKDAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
         return (
-            <Card className={ styles.challengeCard.container }>
+            <View style={ styles.general.view }>
+                <Text style={ styles.general.title }>Your Rainbow</Text>
+
                 <View style={ {
                     textContainer:
                         {
@@ -28,10 +34,25 @@ const calendar = class Calendar extends React.Component {
                             alignItems: 'stretched',
                         }
                     } }>
-                        <Text style={ styles.general.calendarTitle }>This Week</Text>
-                        <View style={ { textContainer: { flex: 1, flexDirection: 'row', alignItems: 'stretched' } } }>
+                        <View
+                            style={ { textContainer: { flex: 1, flexDirection: 'row', alignItems: 'stretched' } } }>
                             {
-                                WEEKDAYS.map(day => <Text key={ day }>{ `${ day }` }</Text>)
+                                WEEKDAYS.map(day => (
+                                    <Card key={ day } style={ styles.cards.weekDay }>
+                                        <View style={ { ...styles.views.weekDayView, flexDirecton: 'row' } }>
+                                            <Text key={ day } style={ {
+                                                ...styles.general.weekDay,
+                                                flex: 1,
+                                                width: '100%',
+                                                backgroundColor: 'transparent',
+                                                color: '#fff'
+                                            } }>
+                                                { `${ day }` }
+                                            </Text>
+
+                                        </View>
+                                    </Card>
+                                ))
                             }
                         </View>
                     </View>
@@ -42,25 +63,9 @@ const calendar = class Calendar extends React.Component {
                             alignItems: 'stretched',
                         }
                     } }>
-                        {
-                            [0, 1, 2, 3, 4].map((number) => (
-                                <View key={ number } style={ {
-                                    textContainer: {
-                                        flex: 1,
-                                        flexDirection: 'row',
-                                        alignItems: 'stretched',
-                                    }
-                                } }>
-                                    <Text>bla</Text>
-                                    {
-                                        //WEEKDAYS.map((day, i) => ( <Text>{ `${ number * 7 + ++i }` }</Text> ))
-                                    }
-                                </View> )
-                            )
-                        }
                     </View>
                 </View>
-            </Card>
+            </View>
         )
     }
 };
