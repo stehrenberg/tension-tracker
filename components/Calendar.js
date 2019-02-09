@@ -4,6 +4,8 @@ import { Card } from 'react-native-material-ui';
 import { LinearGradient } from 'expo';
 import Moment from 'moment';
 
+import Weekday from './Weekday';
+
 import styles from '../styles';
 import { data } from '../data/entries';
 
@@ -34,25 +36,9 @@ const calendar = class Calendar extends React.Component {
                             alignItems: 'stretched',
                         }
                     } }>
-                        <View
-                            style={ { textContainer: { flex: 1, flexDirection: 'row', alignItems: 'stretched' } } }>
+                        <View style={ { textContainer: { flex: 1, flexDirection: 'row', alignItems: 'stretched' } } }>
                             {
-                                WEEKDAYS.map(day => (
-                                    <Card key={ day } style={ styles.cards.weekDay }>
-                                        <View style={ { ...styles.views.weekDayView, flexDirecton: 'row' } }>
-                                            <Text key={ day } style={ {
-                                                ...styles.general.weekDay,
-                                                flex: 1,
-                                                width: '100%',
-                                                backgroundColor: 'transparent',
-                                                color: '#fff'
-                                            } }>
-                                                { `${ day }` }
-                                            </Text>
-
-                                        </View>
-                                    </Card>
-                                ))
+                                WEEKDAYS.map(day => <Weekday day={ day } /> )
                             }
                         </View>
                     </View>

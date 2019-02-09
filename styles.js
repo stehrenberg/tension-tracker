@@ -30,8 +30,7 @@ const styles = {
             position: 'relative',
             fontSize: 12,
             fontFamily: 'pea-walker',
-            color: '#fff',
-            fontWeight: 'bold',
+            color: '#000',
             alignSelf: 'flex-start',
         },
         text: {

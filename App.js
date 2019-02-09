@@ -1,15 +1,11 @@
 import React from 'react';
 import { Platform, Text, View, PanResponder, Dimensions, ViewPagerAndroid } from 'react-native';
-import { Font, LinearGradient } from 'expo';
-import Moment from 'moment';
+import { Font } from 'expo';
 
 import ColorChangeView from './components/ColorChangeView';
 import PagerView from './components/PagerView';
 import Calendar from './components/Calendar';
 import styles from './styles';
-import { data } from './data/entries';
-
-const { OS } = Platform.OS;
 
 const app = class App extends React.Component {
 
@@ -116,20 +112,6 @@ const app = class App extends React.Component {
                 </View>
                 <View key="2" style={ { ...styles.views.calendarView } }>
                     <Calendar/>
-                </View>
-                <View key="3" style={ styles.general.view }>
-                    <LinearGradient colors={ [
-                        ...data.filter(entry => Moment(entry.date).format('DD') == "06")
-                            .map(entry => `rgba(${ entry.color.join(',') })`),
-                        'rgba(0,0,0,1)',
-                        'rgba(1,1,0,0.8)'
-                    ] } style={ {
-                        position: 'absolute',
-                        height: '100%',
-                        width: '100%',
-                    } }>
-                        <Text style={{color: '#fff'}}>bla</Text>
-                    </LinearGradient>
                 </View>
             </PagerView>
         );
