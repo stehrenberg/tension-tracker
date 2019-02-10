@@ -12,8 +12,26 @@ import { data } from '../data/entries';
 
 const calendar = class Calendar extends React.Component {
 
-    render() {
+    constructor(props) {
+        super(props);
+        const displayWeekNo = Moment().format("W");
+        this.state = {
+            displayWeekNo,
+            weekEntries: [],
+        }
+    }
 
+    getEntriesForWeek = (week) => {
+        const startOfWeek = Moment(week, "W").startOf("isoWeek");
+        return data.filter((entry) => Moment(entry.date).isSameOrAfter(startOfWeek));
+    };
+
+    getEntriesForWeekday = (weekday) => {
+        const weekEntries = this.getEntriesForWeek(this.state.displayWeekNo);
+        return weekEntries.filter((entry) => Moment(entry.date).format("ddd").toLocaleUpperCase() === weekday);
+    };
+
+    render() {
         const WEEKDAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
         return (
@@ -38,7 +56,13 @@ const calendar = class Calendar extends React.Component {
                     } }>
                         <View style={ { textContainer: { flex: 1, flexDirection: 'row', alignItems: 'stretched' } } }>
                             {
-                                WEEKDAYS.map(day => <Weekday day={ day } /> )
+                                WEEKDAYS.map(
+                                    day => (
+                                        <Weekday
+                                            key={ day }
+                                            day={ day }
+                                            data={ this.getEntriesForWeekday(day) }/>)
+                                )
                             }
                         </View>
                     </View>
@@ -55,46 +79,5 @@ const calendar = class Calendar extends React.Component {
         )
     }
 };
-
-/*const styles = theme => (
-    {
-        calendar: {
-            width: '80vmax',
-        },
-        weekdays: {
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            fontSize: 12,
-            color: '#26cbb5',
-        },
-        daysOfMonth: {
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            color: '#9c9c9c'
-        },
-        weeksOfMonth: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '100%'
-        },
-        daysOfWeek: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            width: '100%',
-            fontSize: 16,
-            color: '#9c9c9c',
-        },
-        day: {
-            width: 30,
-        }
-    }
-);*/
 
 export default calendar;

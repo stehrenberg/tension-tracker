@@ -12,8 +12,8 @@ const app = class App extends React.Component {
     constructor(props) {
         super(props);
 
+        red: 200,
         this.state = {
-            red: 200,
             green: 0,
             blue: 0,
             loaded: false,
@@ -22,7 +22,6 @@ const app = class App extends React.Component {
         this.panResponderHandlers = this.createPanResponderHandlers();
         this.currentRGBValues = { ...this.state };
         this.initialPinchCoords = [];
-        this.colorSaveTimeout = null;
     }
 
     async componentDidMount() {

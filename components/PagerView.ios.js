@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, ViewPagerAndroid } from 'react-native';
+import { View, ScrollView } from 'react-native';
 
 export default class PagerView extends React.Component {
 

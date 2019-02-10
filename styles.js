@@ -31,6 +31,7 @@ const styles = {
             fontSize: 12,
             fontFamily: 'pea-walker',
             color: '#000',
+            backgroundColor: '#fff',
             alignSelf: 'flex-start',
         },
         text: {
