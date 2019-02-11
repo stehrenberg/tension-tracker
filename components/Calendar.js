@@ -1,83 +1,83 @@
 import React from 'react';
-//import { Card, CardContent, CardHeader} from '@material-ui/core';
-import { Card, Text, Title } from 'react-native-material-ui';
+import { View, Text } from 'react-native';
+import { Card } from 'react-native-material-ui';
+import { LinearGradient } from 'expo';
+import Moment from 'moment';
+
+import Weekday from './Weekday';
 
 import styles from '../styles';
+import { data } from '../data/entries';
 
 
 const calendar = class Calendar extends React.Component {
 
-    render() {
-        const WEEKDAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
-        const {classes} = this.props;
-
-        return (
-            <Card className={ styles.challengeCard.container }>
-                <Title>February</Title>
-                <View>
-                    <View>
-                        {
-                            WEEKDAYS.map(day => <Text >{`${day}`}</Text>)
-                        }
-                    </View>
-                    <View>
-                        {
-                            [0, 1, 2, 3, 4].map((number) => (
-                                <View>
-                                    {
-                                        WEEKDAYS
-                                            .map((day, i) => (<Text>{`${number * 7 + ++i}`}</Text>))
-                                    }
-                                </View>)
-                            )
-                        }
-                    </View>
-                </View>
-            </Card>
-        )
-    }
-
-}
-
-/*const styles = theme => (
-    {
-        calendar: {
-            width: '80vmax',
-        },
-        weekdays: {
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            fontSize: 12,
-            color: '#26cbb5',
-        },
-        daysOfMonth: {
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            color: '#9c9c9c'
-        },
-        weeksOfMonth: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '100%'
-        },
-        daysOfWeek: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            width: '100%',
-            fontSize: 16,
-            color: '#9c9c9c',
-        },
-        day: {
-            width: 30,
+    constructor(props) {
+        super(props);
+        const displayWeekNo = Moment().format("W");
+        this.state = {
+            displayWeekNo,
+            weekEntries: [],
         }
     }
-);*/
+
+    getEntriesForWeek = (week) => {
+        const startOfWeek = Moment(week, "W").startOf("isoWeek");
+        return data.filter((entry) => Moment(entry.date).isSameOrAfter(startOfWeek));
+    };
+
+    getEntriesForWeekday = (weekday) => {
+        const weekEntries = this.getEntriesForWeek(this.state.displayWeekNo);
+        return weekEntries.filter((entry) => Moment(entry.date).format("ddd").toLocaleUpperCase() === weekday);
+    };
+
+    render() {
+        const WEEKDAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+
+        return (
+            <View style={ styles.general.view }>
+                <Text style={ styles.general.title }>Your Rainbow</Text>
+
+                <View style={ {
+                    textContainer:
+                        {
+                            flex: 1,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            ...styles.general.textContainer
+                        }
+                } }>
+                    <View style={ {
+                        textContainer: {
+                            flex: 1,
+                            flexDirection: 'column',
+                            alignItems: 'stretched',
+                        }
+                    } }>
+                        <View style={ { textContainer: { flex: 1, flexDirection: 'row', alignItems: 'stretched' } } }>
+                            {
+                                WEEKDAYS.map(
+                                    day => (
+                                        <Weekday
+                                            key={ day }
+                                            day={ day }
+                                            data={ this.getEntriesForWeekday(day) }/>)
+                                )
+                            }
+                        </View>
+                    </View>
+                    <View style={ {
+                        textContainer: {
+                            flex: 1,
+                            flexDirection: 'column',
+                            alignItems: 'stretched',
+                        }
+                    } }>
+                    </View>
+                </View>
+            </View>
+        )
+    }
+};
 
 export default calendar;
