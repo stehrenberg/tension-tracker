@@ -1,11 +1,11 @@
 import React from 'react';
-import { Text, View, PanResponder, Dimensions } from 'react-native';
-import { Avatar } from 'react-native-material-ui';
+import { Platform, Text, View, PanResponder, Dimensions, ViewPagerAndroid, TouchableHighlight } from 'react-native';
+import { Font } from 'expo';
 
 import ColorChangeView from './components/ColorChangeView';
+import PagerView from './components/PagerView';
+import Calendar from './components/Calendar';
 import styles from './styles';
-import ActionButton from "react-native-material-ui/src/ActionButton";
-
 
 const app = class App extends React.Component {
 
@@ -16,16 +16,26 @@ const app = class App extends React.Component {
             red: 200,
             green: 0,
             blue: 0,
+            loaded: false,
         };
         this.colorChangeView = null;
         this.panResponderHandlers = this.createPanResponderHandlers();
         this.currentRGBValues = { ...this.state };
         this.initialPinchCoords = [];
-        this.colorSaveTimeout = null;
+    }
+
+    async componentDidMount() {
+        await Font.loadAsync({
+            'chalkduster': require('./assets/fonts/chalkduster.ttf'),
+            'pea-walker': require('./assets/fonts/pea-walker.ttf'),
+            'glotona-white': require('./assets/fonts/glotona-white.ttf'),
+        });
+
+        this.setState({ loaded: true });
     }
 
     handlePanGrant = (event, gestureState) => {
-        const {touches} = { ...event.nativeEvent };
+        const { touches } = { ...event.nativeEvent };
         const useTouches = event.nativeEvent.changedTouches.length > 2
             ? event.nativeEvent.changedTouches
             : touches;
@@ -77,56 +87,36 @@ const app = class App extends React.Component {
         };
 
         const backgroundColor = numberActiveTouches === 1 ? changeBrightness() : changeHue();
-        //console.log(backgroundColor);
 
         this.currentRGBValues = { ...backgroundColor };
-        this.colorChangeView && this.colorChangeView.setNativeProps({ backgroundColor: this.generateRGBColorString(red, green, blue) });
+        this.setState({ ...backgroundColor });
     };
 
     handlePanEnd = (event, gestureState) => {
-        //this.colorSaveTimeout = setTimeout(this.saveColor(), 1000);
         this.setState({ ...this.currentRGBValues });
-
     };
+
+    saveColor = () => console.log("Long press!");
+
 
     render() {
-        return (
-            <View style={ styles.general.panHandlerView } { ...this.panResponderHandlers }>
-                <ColorChangeView
-                    ref={ colorChangeView => {
-                        this.colorChangeView = colorChangeView;
-                    } }
-                    style={ { ...styles.general.view, backgroundColor: this.generateRGBColorString() } }/>
-                <View style={ styles.views.snapButtonView }>
-                    <ActionButton
-                        size={ 100 }
-                        icon="camera"
-                        style={ {
-                            icon: { fontSize: 60 },
-                            container: {
-                                backgroundColor: '#55cccc',
-                                position: 'absolute',
-                                right: Dimensions.get('window').width * 0.5 - 80,
-                                bottom: 5,
-                            }
+        return this.state.loaded && (
+            <PagerView style={ styles.general.panHandlerView } { ...this.panResponderHandlers }>
+                <View key="1" style={ { ...styles.general.view } } >
+                    <ColorChangeView
+                        ref={ colorChangeView => {
+                            this.colorChangeView = colorChangeView;
                         } }
-                        onPress={
-                            (event) => console.log(event)
-                        }
+                        style={ { ...styles.general.view }}
+                        color={[ this.state.red, this.state.green, this.state.blue ]}
                     />
                 </View>
-            </View>
-
+                <View key="2" style={ { ...styles.views.calendarView } }>
+                    <Calendar/>
+                </View>
+            </PagerView>
         );
     }
-
-    generateRGBColorString = (
-        red = this.state.red,
-        green = this.state.green,
-        blue = this.state.blue
-    ) => {
-        return `rgba(${ red }, ${ green }, ${ blue }, 1)`;
-    };
 
     calcVectorBetween = (vectorPair) => vectorPair.reduce(
         (prev = { x: 0, y: 0 }, current) => (

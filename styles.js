@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 const styles = {
     general: StyleSheet.create({
@@ -7,11 +7,33 @@ const styles = {
             backgroundColor: '#26cbb5',
             alignItems: 'stretch',
             justifyContent: 'center',
+            width: Dimensions.get('window').width,
+            height: Dimensions.get('window').height,
         },
         title: {
-            color: '#e44681',
+            color: '#fff',
+            fontFamily: 'chalkduster',
+            textShadowColor: '#239882',
+            paddingTop: 20,
+            paddingBottom: 10,
+            marginTop: 20,
+            marginBottom: 10,
+            marginLeft: 20,
             fontSize: 36,
-            fontWeight: "bold",
+            width: 'auto',
+        },
+        subTitle: {
+            color: '#e44681',
+            fontSize: 20,
+            fontWeight: 'bold',
+        },
+        weekDay: {
+            position: 'relative',
+            fontSize: 12,
+            fontFamily: 'pea-walker',
+            color: '#000',
+            backgroundColor: '#fff',
+            alignSelf: 'flex-start',
         },
         text: {
             color: '#595959',
@@ -28,7 +50,7 @@ const styles = {
             width: '100%',
         },
         panHandlerView: {
-            flex:1,
+            flex: 1,
             backgroundColor: '#fff',
             width: "100%",
             height: "100%",
@@ -78,7 +100,25 @@ const styles = {
             backgroundColor: '#595959',
             opacity: 10,
         },
+        calendarView: {
+            backgroundColor: "#ffe",
+            height: Dimensions.get('window').height,
+            width: Dimensions.get('window').width,
+        },
+        weekDayView : {
+            height: Dimensions.get('window').height * 0.1,
+        }
     }),
+    cards: StyleSheet.create(
+        {
+            weekDay: {
+                flex: 1,
+                backgroundColor: '#efe',
+                borderColor: '#239882',
+                borderWidth: 0.5,
+            }
+        }
+    ),
 };
 
 export default styles;

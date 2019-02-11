@@ -1,27 +1,23 @@
 import React from 'react';
-import { Text, View, PanResponder, Dimensions } from 'react-native';
+import { Text, View, PanResponder, Dimensions, TouchableHighlight } from 'react-native';
 
 const colorChangeView = class ColorChangeView extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
 
     view = null;
 
     render() {
-        const { style } = this.props;
+        const { style, color } = this.props;
+        const backgroundColor = this.generateRGBColorString(...color);
+        const newStyle = { ...style, backgroundColor };
 
-        return <View ref={ view => this.view = view }
-                           style={ {...style} }
-        />;
+        return <View ref={ view => this.view = view } style={ { ...newStyle } }/>
     }
 
-    setNativeProps(props) {
-        this.view.setNativeProps(props);
-    }
-
+    generateRGBColorString = (
+        red = 255,
+        green = 0,
+        blue = 255
+    ) => `rgba(${ red }, ${ green }, ${ blue }, 1)`;
 };
 
 export default colorChangeView;
