@@ -11,12 +11,10 @@ export default class Weekday extends React.Component {
 
     render() {
         const { day } = this.props;
+
         const defaultEntry = { color: [1,1,1,0] };
-        let { data } = this.props;
+        const data = this.props.data.length > 0 ? [...this.props.data] : [defaultEntry];
 
-        data = data.length > 0 ? [...data] : [defaultEntry];
-
-        console.log(data);
         return (
             <View>
                 <Card style={ styles.cards.weekDay }>
@@ -41,9 +39,7 @@ export default class Weekday extends React.Component {
                                     width: '100%',
                                     backgroundColor: 'transparent',
                                 } }>
-                                {
-                                    day
-                                }
+                                { day }
                             </Text>
                         </LinearGradient>
                     </View>

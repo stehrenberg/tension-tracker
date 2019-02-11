@@ -8,6 +8,7 @@ const styles = {
             alignItems: 'stretch',
             justifyContent: 'center',
             width: Dimensions.get('window').width,
+            height: Dimensions.get('window').height,
         },
         title: {
             color: '#fff',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, Text, View, PanResponder, Dimensions, ViewPagerAndroid } from 'react-native';
+import { Platform, Text, View, PanResponder, Dimensions, ViewPagerAndroid, TouchableHighlight } from 'react-native';
 import { Font } from 'expo';
 
 import ColorChangeView from './components/ColorChangeView';
@@ -12,8 +12,8 @@ const app = class App extends React.Component {
     constructor(props) {
         super(props);
 
-        red: 200,
         this.state = {
+            red: 200,
             green: 0,
             blue: 0,
             loaded: false,
@@ -87,27 +87,30 @@ const app = class App extends React.Component {
         };
 
         const backgroundColor = numberActiveTouches === 1 ? changeBrightness() : changeHue();
-        //console.log(backgroundColor);
 
         this.currentRGBValues = { ...backgroundColor };
-        this.colorChangeView && this.colorChangeView.setNativeProps({ backgroundColor: this.generateRGBColorString(red, green, blue) });
+        this.setState({ ...backgroundColor });
+        //this.colorChangeView && this.colorChangeView.setNativeProps({ backgroundColor: this.generateRGBColorString(red, green, blue) });
     };
 
     handlePanEnd = (event, gestureState) => {
-        //this.colorSaveTimeout = setTimeout(this.saveColor(), 1000);
         this.setState({ ...this.currentRGBValues });
-
     };
+
+    saveColor = () => console.log("Long press!");
+
 
     render() {
         return this.state.loaded && (
             <PagerView style={ styles.general.panHandlerView } { ...this.panResponderHandlers }>
-                <View key="1" style={ { ...styles.general.view } }>
+                <View key="1" style={ { ...styles.general.view } } >
                     <ColorChangeView
                         ref={ colorChangeView => {
                             this.colorChangeView = colorChangeView;
                         } }
-                        style={ { ...styles.general.view, backgroundColor: this.generateRGBColorString() } }/>
+                        style={ { ...styles.general.view }}
+                        color={[ this.state.red, this.state.green, this.state.blue ]}
+                    />
                 </View>
                 <View key="2" style={ { ...styles.views.calendarView } }>
                     <Calendar/>
@@ -115,14 +118,6 @@ const app = class App extends React.Component {
             </PagerView>
         );
     }
-
-    generateRGBColorString = (
-        red = this.state.red,
-        green = this.state.green,
-        blue = this.state.blue
-    ) => {
-        return `rgba(${ red }, ${ green }, ${ blue }, 1)`;
-    };
 
     calcVectorBetween = (vectorPair) => vectorPair.reduce(
         (prev = { x: 0, y: 0 }, current) => (
