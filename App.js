@@ -1,11 +1,14 @@
 import React from 'react';
 import { Platform, Text, View, PanResponder, Dimensions, ViewPagerAndroid, TouchableHighlight } from 'react-native';
 import { Font } from 'expo';
+import Moment from 'moment';
 
 import ColorChangeView from './components/ColorChangeView';
 import PagerView from './components/PagerView';
 import Calendar from './components/Calendar';
+
 import styles from './styles';
+import { data } from './data/entries';
 
 const app = class App extends React.Component {
 
@@ -96,21 +99,31 @@ const app = class App extends React.Component {
         this.setState({ ...this.currentRGBValues });
     };
 
-    saveColor = () => console.log("Long press!");
+    saveColor = () => {
+        const {red, green, blue} = this.state;
+        const newEntry = {
+            date: Moment().format("YYYY-MM-DD HH:mm:ss"),
+            color: [red, green, blue, 1]
+        };
+        data.push(newEntry);
+        console.log(data);
+    };
 
 
     render() {
         return this.state.loaded && (
             <PagerView style={ styles.general.panHandlerView } { ...this.panResponderHandlers }>
-                <View key="1" style={ { ...styles.general.view } } >
-                    <ColorChangeView
-                        ref={ colorChangeView => {
-                            this.colorChangeView = colorChangeView;
-                        } }
-                        style={ { ...styles.general.view }}
-                        color={[ this.state.red, this.state.green, this.state.blue ]}
-                    />
-                </View>
+                <TouchableHighlight onLongPress={ this.saveColor }>
+                    <View key="1" style={ { ...styles.general.view } }>
+                        <ColorChangeView
+                            ref={ colorChangeView => {
+                                this.colorChangeView = colorChangeView;
+                            } }
+                            style={ { ...styles.general.view } }
+                            color={ [this.state.red, this.state.green, this.state.blue] }
+                        />
+                    </View>
+                </TouchableHighlight>
                 <View key="2" style={ { ...styles.views.calendarView } }>
                     <Calendar/>
                 </View>
